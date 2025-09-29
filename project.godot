@@ -11,9 +11,12 @@ config_version=5
 [application]
 
 config/name="MoneyGrab"
+config/version="0.8"
 run/main_scene="uid://b405n07h5hfsi"
 config/features=PackedStringArray("4.5", "Mobile")
-config/icon="res://Assets/icon.svg"
+boot_splash/show_image=false
+boot_splash/fullsize=false
+config/icon="uid://dru1mht8xa20k"
 
 [autoload]
 
@@ -21,6 +24,7 @@ GameManager="*res://Globals/game_manager.gd"
 CustomResLoader="*res://Globals/res_loader.gd"
 SceneManager="*res://Globals/scene_manager.gd"
 SaveManager="*res://Globals/save_manager.gd"
+SoundManager="*res://Globals/sound_manager.gd"
 
 [debug]
 
