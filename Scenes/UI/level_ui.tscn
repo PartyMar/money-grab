@@ -1,0 +1,238 @@
+[gd_scene load_steps=13 format=3 uid="uid://cdf04puanw05v"]
+
+[ext_resource type="Script" uid="uid://ialbl4jkpj7e" path="res://Scenes/UI/level_ui.gd" id="1_46n82"]
+[ext_resource type="Script" uid="uid://pum14l3cqlc8" path="res://Scenes/UI/coins_counter.gd" id="1_tk1ol"]
+[ext_resource type="Texture2D" uid="uid://lmetes0xddm" path="res://Assets/sprites/coin.png" id="2_m0wgp"]
+[ext_resource type="FontFile" uid="uid://x6omhevadsgh" path="res://Assets/fonts/PixelOperator8-Bold.ttf" id="3_haw25"]
+[ext_resource type="Script" uid="uid://bjrbjb44rhmd2" path="res://Scenes/UI/result_panel.gd" id="4_307ub"]
+[ext_resource type="AudioStream" uid="uid://chw8ovrmmyfh1" path="res://Assets/sounds/victory.wav" id="5_haw25"]
+[ext_resource type="AudioStream" uid="uid://c554r03apw16b" path="res://Assets/sounds/defeat.wav" id="6_307ub"]
+[ext_resource type="Script" uid="uid://bg8t23p3lgp1n" path="res://Scenes/UI/pause_panel.gd" id="8_46n82"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4hvuo"]
+bg_color = Color(0.023529412, 0.5058824, 0.40392157, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c5erv"]
+atlas = ExtResource("2_m0wgp")
+region = Rect2(0, 0, 16.52208, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y4dr7"]
+bg_color = Color(0.023529412, 0.5058824, 0.40392157, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 25.0
+expand_margin_top = 25.0
+expand_margin_right = 25.0
+expand_margin_bottom = 25.0
+
+[sub_resource type="Theme" id="Theme_didp7"]
+default_font = ExtResource("3_haw25")
+default_font_size = 35
+
+[node name="LevelUI" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_46n82")
+
+[node name="TopPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.1
+offset_bottom = -6.800003
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4hvuo")
+
+[node name="CoinsCounter" type="HBoxContainer" parent="TopPanel" node_paths=PackedStringArray("label")]
+layout_mode = 2
+size_flags_horizontal = 0
+script = ExtResource("1_tk1ol")
+label = NodePath("CoinLabel")
+
+[node name="CoinImage" type="TextureRect" parent="TopPanel/CoinsCounter"]
+texture_filter = 1
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_c5erv")
+
+[node name="CoinLabel" type="Label" parent="TopPanel/CoinsCounter"]
+texture_filter = 1
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_haw25")
+theme_override_font_sizes/font_size = 32
+text = "0/9"
+horizontal_alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopPanel/CoinsCounter"]
+custom_minimum_size = Vector2(5, 55)
+layout_mode = 2
+
+[node name="ResultPanel" type="PanelContainer" parent="." node_paths=PackedStringArray("result_label", "button_new_run", "button_quit", "sound_victory", "sound_defeat")]
+visible = false
+z_index = 50
+custom_minimum_size = Vector2(398, 256)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -199.0
+offset_top = -128.0
+offset_right = 199.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y4dr7")
+script = ExtResource("4_307ub")
+result_label = NodePath("ButtonsContainer/ResultLabel")
+button_new_run = NodePath("ButtonsContainer/ButtonNewRun")
+button_quit = NodePath("ButtonsContainer/ButtonQuit")
+sound_victory = NodePath("SoundVictory")
+sound_defeat = NodePath("SoundDefeat")
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="ResultPanel"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="ResultLabel" type="Label" parent="ResultPanel/ButtonsContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_haw25")
+theme_override_font_sizes/font_size = 45
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonNewRun" type="Button" parent="ResultPanel/ButtonsContainer"]
+custom_minimum_size = Vector2(280, 75)
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../ButtonQuit")
+theme = SubResource("Theme_didp7")
+action_mode = 0
+text = "New Run"
+
+[node name="ButtonQuit" type="Button" parent="ResultPanel/ButtonsContainer"]
+custom_minimum_size = Vector2(280, 75)
+layout_mode = 2
+focus_neighbor_top = NodePath("../ButtonNewRun")
+theme = SubResource("Theme_didp7")
+action_mode = 0
+text = "Quit
+"
+
+[node name="SoundVictory" type="AudioStreamPlayer" parent="ResultPanel"]
+stream = ExtResource("5_haw25")
+
+[node name="SoundDefeat" type="AudioStreamPlayer" parent="ResultPanel"]
+stream = ExtResource("6_307ub")
+
+[node name="PausePanel" type="PanelContainer" parent="." node_paths=PackedStringArray("button_resume", "button_new_run", "button_load", "button_save", "button_quit")]
+visible = false
+z_index = 50
+custom_minimum_size = Vector2(398, 256)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -217.5
+offset_top = -195.225
+offset_right = 217.5
+offset_bottom = 260.77515
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y4dr7")
+script = ExtResource("8_46n82")
+button_resume = NodePath("ButtonsContainer/ButtonResume")
+button_new_run = NodePath("ButtonsContainer/ButtonNewRun")
+button_load = NodePath("ButtonsContainer/HBoxContainer/ButtonLoad")
+button_save = NodePath("ButtonsContainer/HBoxContainer/ButtonSave")
+button_quit = NodePath("ButtonsContainer/ButtonQuit")
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="PausePanel"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="Label" type="Label" parent="PausePanel/ButtonsContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_haw25")
+theme_override_font_sizes/font_size = 45
+text = "PAUSE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonResume" type="Button" parent="PausePanel/ButtonsContainer"]
+custom_minimum_size = Vector2(280, 75)
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../ButtonNewRun")
+theme = SubResource("Theme_didp7")
+action_mode = 0
+text = "Resume"
+
+[node name="ButtonNewRun" type="Button" parent="PausePanel/ButtonsContainer"]
+custom_minimum_size = Vector2(280, 75)
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../HBoxContainer/ButtonLoad")
+theme = SubResource("Theme_didp7")
+action_mode = 0
+text = "New Run"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PausePanel/ButtonsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="ButtonLoad" type="Button" parent="PausePanel/ButtonsContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 75)
+layout_mode = 2
+focus_neighbor_top = NodePath("../../ButtonNewRun")
+focus_neighbor_right = NodePath("../ButtonSave")
+focus_neighbor_bottom = NodePath("../../ButtonQuit")
+theme = SubResource("Theme_didp7")
+action_mode = 0
+text = "Load"
+
+[node name="ButtonSave" type="Button" parent="PausePanel/ButtonsContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 75)
+layout_mode = 2
+focus_neighbor_left = NodePath("../ButtonLoad")
+focus_neighbor_top = NodePath("../../ButtonNewRun")
+focus_neighbor_bottom = NodePath("../../ButtonQuit")
+theme = SubResource("Theme_didp7")
+action_mode = 0
+text = "Save"
+
+[node name="ButtonQuit" type="Button" parent="PausePanel/ButtonsContainer"]
+custom_minimum_size = Vector2(280, 75)
+layout_mode = 2
+focus_neighbor_top = NodePath("../HBoxContainer/ButtonSave")
+theme = SubResource("Theme_didp7")
+text = "Quit
+"
+
+[connection signal="pressed" from="ResultPanel/ButtonsContainer/ButtonNewRun" to="." method="press_new_run"]
+[connection signal="pressed" from="ResultPanel/ButtonsContainer/ButtonQuit" to="." method="press_quit"]
+[connection signal="pressed" from="PausePanel/ButtonsContainer/ButtonResume" to="." method="press_load_game"]
+[connection signal="pressed" from="PausePanel/ButtonsContainer/ButtonNewRun" to="." method="press_new_run"]
+[connection signal="pressed" from="PausePanel/ButtonsContainer/HBoxContainer/ButtonLoad" to="." method="press_load_game"]
+[connection signal="pressed" from="PausePanel/ButtonsContainer/HBoxContainer/ButtonSave" to="." method="press_save_game"]
+[connection signal="pressed" from="PausePanel/ButtonsContainer/ButtonQuit" to="." method="press_quit"]

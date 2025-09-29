@@ -1,0 +1,112 @@
+[gd_scene load_steps=9 format=3 uid="uid://bxateb7e5qy03"]
+
+[ext_resource type="Script" uid="uid://dqp3yme2vjrgb" path="res://Scenes/Objects/enemy.gd" id="1_cd3cc"]
+[ext_resource type="Texture2D" uid="uid://lckd0cr6do1e" path="res://Assets/sprites/slime_purple.png" id="2_20y0t"]
+
+[sub_resource type="Animation" id="Animation_i2hje"]
+resource_name = "Death"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemySprite2D:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(3, 0), Vector2i(2, 0), Vector2i(1, 0), Vector2i(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_luh4x"]
+resource_name = "Idle"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemySprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 5]
+}
+
+[sub_resource type="Animation" id="Animation_nbmay"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemySprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EnemySprite2D:frame_coords")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(2, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nbmay"]
+_data = {
+&"Death": SubResource("Animation_i2hje"),
+&"Idle": SubResource("Animation_luh4x"),
+&"RESET": SubResource("Animation_nbmay")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_07rqe"]
+size = Vector2(12, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_luh4x"]
+size = Vector2(14, 12)
+
+[node name="Enemy1" type="StaticBody2D" node_paths=PackedStringArray("attack_area", "animator", "timer") groups=["SaveObject"]]
+z_index = 5
+script = ExtResource("1_cd3cc")
+attack_area = NodePath("AttackArea2D")
+animator = NodePath("AnimationPlayer")
+timer = NodePath("Timer")
+
+[node name="EnemySprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-2.3841858e-07, -6)
+texture = ExtResource("2_20y0t")
+hframes = 4
+vframes = 3
+frame = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_nbmay")
+}
+autoplay = "Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_07rqe")
+
+[node name="AttackArea2D" type="Area2D" parent="."]
+position = Vector2(0, -6)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea2D"]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_luh4x")
+
+[node name="Timer" type="Timer" parent="."]
